@@ -18,7 +18,7 @@ func TestPassengersBoardingAtLondon(t *testing.T) {
 
 	reservationService.MakeReservation(mockdata.CreateLondonToAmsterdamOneFirstClassOneSecondClassBooking1())
 
-	passengersBoardingLondon := rs.CountPassengersAtStation("London", true)
+	passengersBoardingLondon := reservationService.CountPassengersAtStation("London", true)
 	if passengersBoardingLondon != 2 {
 		t.Errorf(errors.ErrPassengersBoarding, 2, "London", passengersBoardingLondon)
 	}
@@ -30,7 +30,7 @@ func TestPassengersLeavingAtParis(t *testing.T) {
 
 	reservationService.MakeReservation(mockdata.CreateLondonToAmsterdamOneFirstClassOneSecondClassBooking1())
 
-	passengersLeavingParis := rs.CountPassengersAtStation("Paris", false)
+	passengersLeavingParis := reservationService.CountPassengersAtStation("Paris", false)
 	if passengersLeavingParis != 0 {
 		t.Errorf(errors.ErrPassengersLeaving, 0, "Paris", passengersLeavingParis)
 	}
@@ -42,7 +42,7 @@ func TestPassengersBetweenCalaisAndParis(t *testing.T) {
 
 	reservationService.MakeReservation(mockdata.CreateLondonToAmsterdamOneFirstClassOneSecondClassBooking1())
 
-	passengersBetweenCalaisParis := rs.CountPassengersAtStation("Calais", true) - rs.CountPassengersAtStation("Paris", false)
+	passengersBetweenCalaisParis := reservationService.CountPassengersAtStation("Calais", true) - reservationService.CountPassengersAtStation("Paris", false)
 	if passengersBetweenCalaisParis != 0 {
 		t.Errorf(errors.ErrPassengersBetweenStations, 0, "Calais", "Paris", passengersBetweenCalaisParis)
 	}
@@ -57,7 +57,7 @@ func TestPassengerInSeatA11(t *testing.T) {
 
 	t.Logf("Booking added: %+v", booking)
 
-	passengerInA11 := rs.FindPassengerInSeat(mockdata.ServiceID, mockdata.ServiceDate, "First-class", mockdata.SeatA11)
+	passengerInA11 := reservationService.FindPassengerInSeat(mockdata.ServiceID, mockdata.ServiceDate, "First-class", mockdata.SeatA11)
 	if passengerInA11 == nil || passengerInA11.Name != "John Doe" {
 		t.Errorf(errors.ErrPassengerNotFound, "John Doe", mockdata.SeatA11, passengerInA11)
 	} else {

@@ -16,7 +16,7 @@ type ReservationService struct {
 func (rs *ReservationService) MakeReservation(booking models.Booking) error {
 	for _, passenger := range booking.Passengers {
 		for _, ticket := range passenger.Tickets {
-			if rs.ReservationSystem.IsSeatTaken(ticket.Service.ID, ticket.Service.Date, ticket.Seat.Number) {
+			if rs.IsSeatReserved(ticket.Service.ID, ticket.Service.Date, ticket.Seat.Number) {
 				return errors.New(intErrors.ErrSeatAlreadyReserved)
 			}
 		}
