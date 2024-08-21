@@ -195,3 +195,13 @@ func CreateAmsterdamToBerlinBooking() models.Booking {
 		},
 	}
 }
+
+func CreateMockReservationSystem() *models.ReservationSystem {
+	return &models.ReservationSystem{
+		Bookings: []models.Booking{
+			CreateParisToAmsterdamTwoFirstClassBooking(),
+			CreateLondonToAmsterdamOneFirstClassOneSecondClassBooking1(),
+			CreateAmsterdamToBerlinBooking(),
+		},
+	}
+}

@@ -48,3 +48,47 @@ func (rs *ReservationService) HandleCreateBooking(r *http.Request) views.Respons
 		Body:       booking,
 	}
 }
+
+func (rs *ReservationService) IsSeatReserved(serviceID, date, seatNumber string) bool {
+	for _, booking := range rs.ReservationSystem.Bookings {
+		for _, passenger := range booking.Passengers {
+			for _, ticket := range passenger.Tickets {
+				if ticket.Service.ID == serviceID && ticket.Service.Date == date && ticket.Seat.Number == seatNumber {
+					return true
+				}
+			}
+		}
+	}
+	return false
+}
+
+func (rs *ReservationService) CountPassengersAtStation(stationName string, boarding bool) int {
+	count := 0
+	for _, booking := range rs.ReservationSystem.Bookings {
+		for _, passenger := range booking.Passengers {
+			for _, ticket := range passenger.Tickets {
+				if (boarding && ticket.Origin.Name == stationName) || (!boarding && ticket.Destination.Name == stationName) {
+					count++
+				}
+			}
+		}
+	}
+	return count
+}
+
+func (rs *ReservationService) FindPassengerInSeat(serviceID, date, carriage, seatNumber string) *models.Passenger {
+	for _, booking := range rs.ReservationSystem.Bookings {
+		for _, passenger := range booking.Passengers {
+			for _, ticket := range passenger.Tickets {
+				if ticket.Service.ID == serviceID && ticket.Service.Date == date && ticket.Seat.Number == seatNumber && ticket.Seat.Class == carriage {
+					return &passenger
+				}
+			}
+		}
+	}
+	return nil
+}
+
+func (rs *ReservationService) AddBooking(booking models.Booking) {
+	rs.ReservationSystem.Bookings = append(rs.ReservationSystem.Bookings, booking)
+}
